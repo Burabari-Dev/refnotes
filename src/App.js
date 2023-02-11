@@ -1,9 +1,10 @@
 import './App.css';
+import MainLayout from './layouts/main-layout';
 
 function App() {
   return (
     <div className="App">
-      Hello World
+      <MainLayout/>
     </div>
   );
 }
