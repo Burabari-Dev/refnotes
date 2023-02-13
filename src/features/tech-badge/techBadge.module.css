@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  height: 120px;
+  border-radius: 6px;
+  padding: 0px 20px;
+  background-color: aliceblue;
+  box-shadow: 8px 8px 8px grey;
+  cursor: pointer;
+}
+
+.wrapper:hover {
+  box-shadow: 10px 10px 8px grey;
+}
