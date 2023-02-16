@@ -1,26 +1,26 @@
 export const techs = [
   {
-    id: 't0001',
+    id: 't001',
     name: 'Cloud Computing (AWS)',
   },
   {
-    id: 't0002',
+    id: 't002',
     name: 'Python Programming',
   },
   {
-    id: 't0003',
+    id: 't003',
     name: 'Vagrant',
   },
   {
-    id: 't0004',
+    id: 't004',
     name: 'Linux & Bash Scripting',
   },
   {
-    id: 't0005',
+    id: 't005',
     name: 'Terraform',
   },
   {
-    id: 't0006',
+    id: 't006',
     name: 'Docker',
     icon: './icons/docker.png',
   },
