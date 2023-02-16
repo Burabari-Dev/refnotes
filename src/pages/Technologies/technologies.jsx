@@ -7,7 +7,7 @@ export default function Technologies() {
   
   return (
     <div className={styles.content}>
-      {techs.map(t => <TechBadge title={t.name} key={t.id} />)}
+      {techs.map(t => <TechBadge tech={t} key={t.id} />)}
     </div>
   )
 }
