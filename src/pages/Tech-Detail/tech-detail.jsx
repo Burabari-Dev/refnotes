@@ -1,31 +1,12 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getTechById, getTechDetailsData, getTechDetailsData2, getTechModuleGroups } from '../../services/backend';
+import { getTechDetailsData2, } from '../../services/backend';
 import styles from './tech-detail.module.css';
 
 export default function TechDetail() {
   const { techId } = useParams();
   //TODO: logic to get details of this page from techId
 
-  /*
-  Structure of the DATA:
-  {
-    title: string,                -> ModuleGroup Title
-    values: [                     -> 
-      {
-        title: string,            -> Module Title
-        values: [                 -> 
-          {
-            id: string,           -> Paragraph ID
-            content: [content]    -> Array of Paragraph Contents
-          }
-        ]
-      }
-    ]
-  }
-  */
-  // const data = getTechDetailsData(techId);
 
   /*
   STRUCTURE OF THE DATA
@@ -44,12 +25,6 @@ export default function TechDetail() {
 
   const [menus, setMenus] = useState(data2.menus);
 
-  // useEffect(() => {
-  //   setTitle(data2.techTitle);
-  //   setMainMenus(data2.moduleGroups);
-  //   setSubMenus(data2.modules);
-  //   setContents(data2.contents);
-  // }, [data2])
 
   return (
     <div className={styles.container}>
