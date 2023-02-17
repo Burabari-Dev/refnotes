@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import MultiContent from '../multi-content/multiContent';
-import styles from './paragraph.module.css';
+import styles from './section.module.css';
 
-export default function Paragraph({ type, contents = [] | '' }) {
+export default function Section({ type, contents=[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   
-  if(typeof contents === 'string'){
-    return <p>{contents}</p>
+  if(contents.length < 2) {
+    return <p>{contents[0].data}</p>
   }
 
   const multiContents = contents.map(c => <MultiContent key={c.id} type={type} data={c.data} />);
