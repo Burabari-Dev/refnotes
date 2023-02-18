@@ -1,5 +1,9 @@
 export const techs = [
   {
+    id: 't000',
+    name: 'Identity Access Management (IAM)',
+  },
+  {
     id: 't001',
     name: 'Cloud Computing (AWS)',
   },
