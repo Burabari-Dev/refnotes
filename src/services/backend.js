@@ -6,10 +6,6 @@ import { contents } from '../test-data/contents';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
 
-function getModule(moduleId) {
-  return modules.find(m => m.id === moduleId);
-}
-
 function getParagraphs(moduleId) {
   return paragraphs.filter(p => p.moduleId === moduleId);
 }
