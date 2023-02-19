@@ -9,6 +9,6 @@ export default function TechBadge({ tech }) {
   }
 
   return (
-    <div className={styles.wrapper} onClick={handleNavigation}>{tech.name}</div>
+    <div className={styles.wrapper} onClick={handleNavigation}>{tech.title}</div>
   )
 }
