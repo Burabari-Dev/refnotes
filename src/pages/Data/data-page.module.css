@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.techColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1.2;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.groupColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1.2;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.moduleColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1.2;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.detailsColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 4;
+  background-color: lightskyblue;
+  width: 100%;
+  height: 100%;
+}
+
+/* .techColumn:focus, .groupColumn:focus, .moduleColumn:focus {
+  flex: 1.4;
+} */
+
+.header {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 10px;
+  overflow: visible;
+  text-overflow: ellipsis;
+  white-space: normal;
+  background-color: #eee;
+  min-height: 22px;
+  max-height: 22px;
+}
+
+.previewArea {
+  display: flex;
+  width: 100%;
+  flex: 1;
+
+}
