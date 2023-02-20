@@ -18,14 +18,6 @@ export function getAllTechs() {
   return [];
 }
 
-export function getTechTitle(techId) {
-  if (isDevEnv) {
-    return techs.find(t => t.id === techId).name;
-  }
-  //TODO: logic to fetch data from backend
-  return '';
-}
-
 export function getTechById(techId) {
   if (isDevEnv) {
     return techs.find(t => t.id === techId);
@@ -71,6 +63,22 @@ export function getFirstModuleData(techId) {
   if (isDevEnv) {
     const firstModule = getTechModuleMenus(techId).find(mm => mm.id.startsWith('m0'));  //TODO: Change this atrocity for prod code
     return getModuleData(firstModule?.id);
+  }
+  //TODO: logic to fetch data from backend
+  return [];
+}
+
+export function getTechModuleGroups(techId) {
+  if (isDevEnv) {
+    return moduleGroups.filter(mg => mg.techId === techId);
+  }
+  //TODO: logic to fetch data from backend
+  return [];
+}
+
+export function getGroupModules(groupId) {
+  if (isDevEnv) {
+    return modules.filter(m => m.groupId === groupId);
   }
   //TODO: logic to fetch data from backend
   return [];

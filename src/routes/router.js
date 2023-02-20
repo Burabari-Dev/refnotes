@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '../pages/Error/error-page';
 import Home from '../pages/Home/home';
+import DataPage from '../pages/Data/data-page';
 import Login from '../pages/Login/login';
 import TechDetail from '../pages/Tech-Detail/tech-detail';
 import Technologies from '../pages/Technologies/technologies';
@@ -30,6 +31,11 @@ export const router = createBrowserRouter([
       {
         path: '/user/:userId',
         element: <UserProfile/>,
+        errorElement: <ErrorPage/>
+      },
+      {
+        path: '/data',
+        element: <DataPage/>,
         errorElement: <ErrorPage/>
       },
     ]

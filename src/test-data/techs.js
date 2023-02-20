@@ -1,31 +1,31 @@
 export const techs = [
   {
     id: 't000',
-    name: 'Identity Access Management (IAM)',
+    title: 'Identity Access Management (IAM)',
   },
   {
     id: 't001',
-    name: 'Cloud Computing (AWS)',
+    title: 'Cloud Computing (AWS)',
   },
   {
     id: 't002',
-    name: 'Python Programming',
+    title: 'Python Programming',
   },
   {
     id: 't003',
-    name: 'Vagrant',
+    title: 'Vagrant',
   },
   {
     id: 't004',
-    name: 'Linux & Bash Scripting',
+    title: 'Linux & Bash Scripting',
   },
   {
     id: 't005',
-    name: 'Terraform',
+    title: 'Terraform',
   },
   {
     id: 't006',
-    name: 'Docker',
+    title: 'Docker',
     icon: './icons/docker.png',
   },
 ]

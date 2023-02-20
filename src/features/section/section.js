@@ -20,11 +20,11 @@ export default function Section({ contents = [] }) {
   }
 
   return (
-    <div>
+    <div className={(contents.length < 2) ? styles.wrapper : styles.codeWrapper }>
       <div className={styles.optionsHeader}>
         {
           contents.map((c, index) => (
-            <button key={index} onClick={handleClick}>{c.option}</button>
+            <button key={index} onClick={() => handleClick(index)}>{c.option}</button>
           ))
         }
       </div>
