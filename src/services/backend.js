@@ -3,8 +3,36 @@ import { moduleGroups } from '../test-data/module-groups';
 import { modules } from '../test-data/modules';
 import { paragraphs } from '../test-data/paragraphs';
 import { contents } from '../test-data/contents';
+//=> FIRESTORE 
+import { initializeApp, getApp } from "firebase/app";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAcmVgv7qr0JR5WS1um6JEqE8cCP4-glMM",
+  authDomain: "refnotes-f3644.firebaseapp.com",
+  projectId: "refnotes-f3644",
+  storageBucket: "refnotes-f3644.appspot.com",
+  messagingSenderId: "694793057846",
+  appId: "1:694793057846:web:e53e8f7ca16ef30a87ca97"
+};
 
 const isDevEnv = process.env.NODE_ENV === 'development';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const functions = getFunctions(getApp());
+
+// if(location.hostname === 'localhost'){
+if(isDevEnv){
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectStorageEmulator(storage, 'localhost', 9199);
+  connectFunctionsEmulator(functions, 'localhost', 5001);
+}
 
 function getParagraphs(moduleId) {
   return paragraphs.filter(p => p.moduleId === moduleId);
