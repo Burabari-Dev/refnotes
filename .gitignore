@@ -11,6 +11,9 @@
 # production
 /build
 
+# Firebase
+/emulate-data
+
 # misc
 .DS_Store
 .env.local
