@@ -27,7 +27,9 @@
 .menus {
   display: flex;
   flex-direction: column;
-  width: 220px;
+  gap: 8px;
+  max-width: 320px;
+  min-width: 220px;
   font-size: 14px;
   border-right: #5A584E44 solid .5px;
   padding-right: 20px;
@@ -41,13 +43,14 @@
 .subMenu {
   font-size: 13px;
   margin-left: 12px;
-  padding: 4px 0px;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
-.mainMenu:hover, .subMenu:hover {
+.subMenu:hover {
   cursor: pointer;
-  color: #fff;
-  background-color: #5A584EEE;
+  /* color: #fff; */
+  background-color: #eee;
 }
 
 .contentArea {
@@ -55,4 +58,12 @@
   flex-direction: column;
   width: 100%;
 
+}
+
+.centered{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
