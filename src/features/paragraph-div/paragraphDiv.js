@@ -2,7 +2,6 @@ import { useState } from 'react';
 import MultiContent from '../multi-content/multiContent';
 import styles from './paragraphDiv.module.css';
 
-// export default function ParagraphDiv({ contents = [] }) {
 export default function ParagraphDiv({ contents = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
