@@ -1,85 +1,209 @@
+/* eslint-disable no-restricted-globals */
 import { techs } from '../test-data/techs';
 import { moduleGroups } from '../test-data/module-groups';
 import { modules } from '../test-data/modules';
 import { paragraphs } from '../test-data/paragraphs';
 import { contents } from '../test-data/contents';
+//=> FIRESTORE 
+import { initializeApp, getApp } from "firebase/app";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+  getDocsFromCache,
+  getDoc,
+  orderBy
+} from "firebase/firestore";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { wait } from '@testing-library/user-event/dist/utils';
 
-const isDevEnv = process.env.NODE_ENV === 'development';
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAcmVgv7qr0JR5WS1um6JEqE8cCP4-glMM",
+  authDomain: "refnotes-f3644.firebaseapp.com",
+  projectId: "refnotes-f3644",
+  storageBucket: "refnotes-f3644.appspot.com",
+  messagingSenderId: "694793057846",
+  appId: "1:694793057846:web:e53e8f7ca16ef30a87ca97"
+};
 
-function getParagraphs(moduleId) {
-  return paragraphs.filter(p => p.moduleId === moduleId);
+const isDevEnv = location.hostname === 'localhost' || location.hostname === '192.168.0.1'  //process.env.NODE_ENV === 'development';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const functions = getFunctions(getApp());
+
+// if(location.hostname === 'localhost'){
+if (isDevEnv) {
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectStorageEmulator(storage, 'localhost', 9199);
+  connectFunctionsEmulator(functions, 'localhost', 5001);
 }
 
-export function getAllTechs() {
-  if (isDevEnv) {
-    return techs;
+//-> COLLECTIONS
+const techsRef = collection(db, 'technologies');
+const groupsRef = collection(db, 'module-groups');
+const modulesRef = collection(db, 'modules');
+const paragraphsRef = collection(db, 'paragraphs');
+
+// //-> BEGIN: Helper Functions
+
+// async function deleteGroupsByTechId(techId) {
+//   const groups = await groupsByTechId(techId);
+//   groups.forEach(g => deleteParagraph(g.id)); //-> Limit before Firestore performance is affected = 500 txns/sec
+// }
+
+// async function deleteModulesByGroupId(groupId) {
+//   const groups = await groupsByTechId(groupId);
+//   groups.forEach(g => deleteParagraph(g.id)); //-> Limit before Firestore performance is affected = 500 txns/sec
+// }
+
+// //-> END: Helper Functions
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TECHNOLOGIES [START] ~~~~~~~~##
+export async function addTech(tech) {
+  await addDoc(techsRef, tech);
+}
+
+export async function updateTech(tech) {
+  const docRef = doc(db, 'technologies', tech.id);
+  await updateDoc(docRef, tech.data);
+}
+
+export async function updateManyTechs(techs = [{}]) {
+  techs.forEach(t => updateTech(t));
+}
+
+export async function deleteTech(techId) {
+
+  //TODO: Delete Tech-> Paragraphs
+  //TODO: Delete Tech-> Modules
+  //TODO: Delete Tech-> Module-Groups
+  //TODO: Perform this in a batch/transaction operation
+  await deleteDoc(doc(db, 'technologies', techId));
+}
+
+export async function allTechs() {
+  const q = query(techsRef, orderBy('rank', 'asc'));
+  let snapshot = await getDocsFromCache(q);
+  if (snapshot.empty) {
+    snapshot = await getDocs(q);
   }
-  //TODO: logic to fetch data from backend
-  return [];
+  return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
 }
 
-export function getTechById(techId) {
-  if (isDevEnv) {
-    return techs.find(t => t.id === techId);
+export async function getTechById(techId) {
+  const docRef = doc(db, 'technologies', techId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists())
+    return docSnap.data();
+  return false;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TECHNOLOGIES [END] ~~~~~~~~~~##
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GROUPS [START] ~~~~~~~~~~~~~~##
+export async function addGroup(group) {
+  await addDoc(groupsRef, group);
+}
+
+export async function updateGroup(group) {
+  const docRef = doc(db, 'module-groups', group.id);
+  await updateDoc(docRef, group.data);
+}
+
+export async function updateManyGroups(groups = [{}]) {
+  groups.forEach(g => updateGroup(g));
+}
+
+export async function deleteGroup(groupId) {
+  //TODO: Delete Group-> Paragraphs
+  //TODO: Delete Group-> Modules
+  //TODO: Perform this in a batch/transaction operation
+  await deleteDoc(doc(db, 'module-groups', groupId));
+}
+
+export async function groupsByTechId(techId) {
+  const q = query(groupsRef, where('techId', '==', techId), orderBy('rank'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+}
+
+export async function techGroupedModules(techId) {
+  const groups = await groupsByTechId(techId);
+  const _groups = groups.map(g => ({ id: g.id, title: g.data.title, type: 'MAIN' }))
+  const arr = [..._groups];
+  
+  for (const g of _groups) {
+    const modules = await modulesByGroupId(g.id);
+    const _modules = modules.map(m => ({id: m.id, title: m.data.title, type: 'SUB'}))
+    arr.splice(arr.indexOf(g) + 1, 0, ..._modules);
   }
-  //TODO: logic to fetch data from backend
-  return {};
+  return arr;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GROUPS [END] ~~~~~~~~~~~~~~~~##
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODULES [START] ~~~~~~~~~~~~~##
+export async function addModule(module) {
+  await addDoc(modulesRef, module);
+}
+
+export async function updateModule(module) {
+  const docRef = doc(db, 'modules', module.id);
+  await updateDoc(docRef, module.data);
+}
+
+export async function updateManyModules(modules = [{}]) {
+  modules.forEach(m => updateModule(m));
+}
+
+export async function deleteModule(moduleId) {
+  //TODO: Delete Module-> Paragraphs
+  //TODO: Perform this in a batch/transaction operation
+  await deleteDoc(doc(db, 'modules', moduleId));
+}
+
+export async function modulesByGroupId(groupId) {
+  const q = query(modulesRef, where('groupId', '==', groupId), orderBy('rank'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODULES [END] ~~~~~~~~~~~~~~~##
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PARAGRAPHS [START] ~~~~~~~~~~##
+export async function addParagraph(paragraph) {
+  await addDoc(paragraphsRef, paragraph);
+}
+
+export async function updateParagraph(paragraph) {
+  const docRef = doc(db, 'paragraphs', paragraph.id);
+  await updateDoc(docRef, paragraph.data);
+}
+
+export async function updateManyParagraphs(paragraphs = [{}]) {
+  paragraphs.forEach(p => updateParagraph(p));
+}
+
+export async function deleteParagraph(paragraphId) {
+  await deleteDoc(doc(db, 'paragraphs', paragraphId));
+}
+
+export async function paragraphsByModuleId(moduleId) {
+  const q = query(modulesRef, where('moduleId', '==', moduleId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
 }
 
 
-export function getTechModuleMenus(techId) {
-  if (isDevEnv) {
-    let arr = [];
-    const groups = moduleGroups.filter(mg => mg.techId === techId);
-    groups.forEach(g => {
-      arr.push(g);
-      const mods = modules.filter(m => m.groupId === g.id);
-      arr.push(...mods);
-    })
-
-    return arr;
-  }
-  //TODO: logic to fetch data from backend
-  return [];
-}
-
-export function getModuleData(moduleId) {
-  if (isDevEnv) {
-    const sections = getParagraphs(moduleId);
-
-    return sections.map(s => (
-      {
-        paragraphId: s.id,
-        contents: contents.filter(c => c.paragraphId === s.id)
-      })
-    )
-
-  }
-  //TODO: logic to fetch data from backend
-  return [];
-}
-
-export function getFirstModuleData(techId) {
-  if (isDevEnv) {
-    const firstModule = getTechModuleMenus(techId).find(mm => mm.id.startsWith('m0'));  //TODO: Change this atrocity for prod code
-    return getModuleData(firstModule?.id);
-  }
-  //TODO: logic to fetch data from backend
-  return [];
-}
-
-export function getTechModuleGroups(techId) {
-  if (isDevEnv) {
-    return moduleGroups.filter(mg => mg.techId === techId);
-  }
-  //TODO: logic to fetch data from backend
-  return [];
-}
-
-export function getGroupModules(groupId) {
-  if (isDevEnv) {
-    return modules.filter(m => m.groupId === groupId);
-  }
-  //TODO: logic to fetch data from backend
-  return [];
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PARAGRAPHS [END] ~~~~~~~~~~~~##

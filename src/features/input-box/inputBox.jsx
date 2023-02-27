@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './inputBox.module.css';
 
-export default function InputBox({ selected, title, setData }) {
+export default function InputBox({ selected, title, addData, setData: updateData }) {
   const [text, setText] = useState(title);
 
   // function changeHandler(txt) {
@@ -11,7 +11,7 @@ export default function InputBox({ selected, title, setData }) {
   function setValue() {
     let _selected = {...selected};
     _selected.title = text;
-    setData(_selected);
+    updateData(_selected);
   }
 
   return (
@@ -32,31 +32,31 @@ export default function InputBox({ selected, title, setData }) {
 
 
 
-function IB({ selected, setData }) {
-  // const [text, setText] = useState(selected?.title);
-  // const [obj, setObj] = useState(selected?.text);
+// function IB({ selected, setData }) {
+//   // const [text, setText] = useState(selected?.title);
+//   // const [obj, setObj] = useState(selected?.text);
 
-  function changeHandler(txt) {
-    let _obj = { ...selected };
-    _obj.title = txt;
-    setData(_obj);
-  }
+//   function changeHandler(txt) {
+//     let _obj = { ...selected };
+//     _obj.title = txt;
+//     setData(_obj);
+//   }
 
-  function setValue() {
-    setData(selected);
-  }
+//   function setValue() {
+//     setData(selected);
+//   }
 
-  return (
-    <div className={styles.wrapper}>
-      <textarea
-        value={selected?.title}
-        onChange={(e) => changeHandler(e.target.value)}
-        rows={4}
-      />
+//   return (
+//     <div className={styles.wrapper}>
+//       <textarea
+//         value={selected?.title}
+//         onChange={(e) => changeHandler(e.target.value)}
+//         rows={4}
+//       />
 
-      <button type='button' onClick={setValue} style={{ fontSize: 12 }} >
-        {(selected && selected.id) ? 'ADD' : 'SAVE'}
-      </button>
-    </div>
-  )
-}
+//       <button type='button' onClick={setValue} style={{ fontSize: 12 }} >
+//         {(selected && selected.id) ? 'ADD' : 'SAVE'}
+//       </button>
+//     </div>
+//   )
+// }

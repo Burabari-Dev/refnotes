@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import MultiContent from '../multi-content/multiContent';
-import styles from './section.module.css';
+import styles from './paragraphDiv.module.css';
 
-export default function Section({ contents = [] }) {
+export default function ParagraphDiv({ contents = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (contents.length === 0) {

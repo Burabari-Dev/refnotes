@@ -1,4 +1,36 @@
 .wraper {
   display: flex;
-  padding: 18px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #eee;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+textarea {
+  margin: 4px;
+  width: 100%;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+}
+
+.icon:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 5px #888888ee;
+}
+
+.txt {
+  padding: 4px;
+}
+
+svg {
+  width: 20px;
+  height: 20px;
 }
