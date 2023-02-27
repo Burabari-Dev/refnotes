@@ -12,6 +12,7 @@
 /build
 
 # Firebase
+firestore-debug.log
 /emulate-data
 /firebase-export-*
 
