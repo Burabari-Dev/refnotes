@@ -47,7 +47,7 @@ export default function DataPage() {
     getAllTechs();
   }, [])
 
-  // //-> fetching Groups effect
+  //-> fetching Groups effect
   useEffect(() => {
     async function fetchData() {
       if (selTech === undefined || selTech.id === undefined)
