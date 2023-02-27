@@ -1,10 +1,3 @@
-/* eslint-disable no-restricted-globals */
-import { techs } from '../test-data/techs';
-import { moduleGroups } from '../test-data/module-groups';
-import { modules } from '../test-data/modules';
-import { paragraphs } from '../test-data/paragraphs';
-import { contents } from '../test-data/contents';
-//=> FIRESTORE 
 import { initializeApp, getApp } from "firebase/app";
 import {
   getFirestore,
@@ -23,7 +16,6 @@ import {
 } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { wait } from '@testing-library/user-event/dist/utils';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -35,7 +27,7 @@ const firebaseConfig = {
   appId: "1:694793057846:web:e53e8f7ca16ef30a87ca97"
 };
 
-const isDevEnv = location.hostname === 'localhost' || location.hostname === '192.168.0.1'  //process.env.NODE_ENV === 'development';
+const isDevEnv = process.env.NODE_ENV === 'development'  //location.hostname === 'localhost' || location.hostname === '192.168.0.1';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -56,19 +48,6 @@ const groupsRef = collection(db, 'module-groups');
 const modulesRef = collection(db, 'modules');
 const paragraphsRef = collection(db, 'paragraphs');
 
-// //-> BEGIN: Helper Functions
-
-// async function deleteGroupsByTechId(techId) {
-//   const groups = await groupsByTechId(techId);
-//   groups.forEach(g => deleteParagraph(g.id)); //-> Limit before Firestore performance is affected = 500 txns/sec
-// }
-
-// async function deleteModulesByGroupId(groupId) {
-//   const groups = await groupsByTechId(groupId);
-//   groups.forEach(g => deleteParagraph(g.id)); //-> Limit before Firestore performance is affected = 500 txns/sec
-// }
-
-// //-> END: Helper Functions
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TECHNOLOGIES [START] ~~~~~~~~##
 export async function addTech(tech) {
