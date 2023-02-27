@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import TitlePaper from '../title-paper/titlePaper';
 import styles from './draggableList.module.css';
 
-export default function DraggableList({ contents = [], setContents, handleClick }) {
+export default function DraggableList({ contents=[], setContents, handleClick, create, remove, update }) {
   const [draggedIndex, setDraggedIndex] = useState(null);
 
   function handleDragStart(event, index) {
@@ -10,13 +11,11 @@ export default function DraggableList({ contents = [], setContents, handleClick 
 
   function handleDragOver(event, index) {
     event.preventDefault();
-    // const items = Array.from(list);
     const items = Array.from(contents);
     const draggedItem = items[draggedIndex];
     items.splice(draggedIndex, 1);
     items.splice(index, 0, draggedItem);
-    // setList(items);
-    setContents(items);
+    setContents(items);                             //-> SetContents at parent level
     setDraggedIndex(index);
   }
 
@@ -24,22 +23,23 @@ export default function DraggableList({ contents = [], setContents, handleClick 
     setDraggedIndex(null);
   }
 
+
   return (
     <div className={styles.listContainer}>
       {contents.map((item, index) => (
         <div
           key={index}
-          className={styles.listItem}
           draggable
           onDragStart={(event) => handleDragStart(event, index)}
           onDragOver={(event) => handleDragOver(event, index)}
           onDragEnd={handleDragEnd}
-          onClick={(e) => handleClick(e, item)}
+          onClick={() => handleClick(item)}
         >
-          {/* title -> by design all the list-objects (Tech | Module-Group | Module) would have a title */}
-          {item.title}  
+          <TitlePaper item={item} create={create} remove={remove} update={update} />
         </div>
       ))}
+      {/* This last TitlePaper is solely for creating new items */}
+      <TitlePaper create={create} remove={remove} update={update} />
     </div>
   );
 }
