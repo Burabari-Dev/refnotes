@@ -59,16 +59,17 @@ export async function updateTech(tech) {
   await updateDoc(docRef, tech.data);
 }
 
-export async function updateManyTechs(techs = [{}]) {
-  techs.forEach(t => updateTech(t));
+export async function updateManyTechs(techs) {
+  techs.forEach(async t => await updateTech(t));
+  return true;
 }
 
 export async function deleteTech(techId) {
-
-  //TODO: Delete Tech-> Paragraphs
-  //TODO: Delete Tech-> Modules
-  //TODO: Delete Tech-> Module-Groups
   //TODO: Perform this in a batch/transaction operation
+  // First delete Tech-> Module-Groups
+  const groups = await groupsByTechId(techId);
+  groups.forEach(async g => await deleteGroup(g.id));
+  // Now you can delete Tech
   await deleteDoc(doc(db, 'technologies', techId));
 }
 
@@ -100,14 +101,17 @@ export async function updateGroup(group) {
   await updateDoc(docRef, group.data);
 }
 
-export async function updateManyGroups(groups = [{}]) {
-  groups.forEach(g => updateGroup(g));
+export async function updateManyGroups(groups) {
+  groups.forEach(async g => await updateGroup(g));
+  return true;
 }
 
 export async function deleteGroup(groupId) {
-  //TODO: Delete Group-> Paragraphs
-  //TODO: Delete Group-> Modules
   //TODO: Perform this in a batch/transaction operation
+  // First delete Group-> Modules
+  const modules = await modulesByGroupId(groupId);
+  modules.forEach(async m => await deleteModule(m.id));
+  // Now you can delete Group
   await deleteDoc(doc(db, 'module-groups', groupId));
 }
 
@@ -142,13 +146,17 @@ export async function updateModule(module) {
   await updateDoc(docRef, module.data);
 }
 
-export async function updateManyModules(modules = [{}]) {
-  modules.forEach(m => updateModule(m));
+export async function updateManyModules(modules) {
+  modules.forEach(async m => await updateModule(m));
+  return true;
 }
 
 export async function deleteModule(moduleId) {
-  //TODO: Delete Module-> Paragraphs
   //TODO: Perform this in a batch/transaction operation
+  // First delete Module-> Paragraphs
+  const paragraphs = await paragraphsByModuleId(moduleId);
+  paragraphs.forEach(async p => await deleteParagraph(p.id));
+  // Now you can delete Module
   await deleteDoc(doc(db, 'modules', moduleId));
 }
 
@@ -170,8 +178,9 @@ export async function updateParagraph(paragraph) {
   await updateDoc(docRef, paragraph.data);
 }
 
-export async function updateManyParagraphs(paragraphs = [{}]) {
-  paragraphs.forEach(p => updateParagraph(p));
+export async function updateManyParagraphs(paragraphs) {
+  paragraphs.forEach(async p => await updateParagraph(p));
+  return true;
 }
 
 export async function deleteParagraph(paragraphId) {

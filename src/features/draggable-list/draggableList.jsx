@@ -2,7 +2,7 @@ import { useState } from 'react';
 import TitlePaper from '../title-paper/titlePaper';
 import styles from './draggableList.module.css';
 
-export default function DraggableList({ contents=[], setContents, handleClick, create, remove, update }) {
+export default function DraggableList({ contents=[], setContents, handleClick, create, remove, update, reRank }) {
   const [draggedIndex, setDraggedIndex] = useState(null);
 
   function handleDragStart(event, index) {
@@ -21,6 +21,7 @@ export default function DraggableList({ contents=[], setContents, handleClick, c
 
   function handleDragEnd() {
     setDraggedIndex(null);
+    reRank();
   }
 
 
