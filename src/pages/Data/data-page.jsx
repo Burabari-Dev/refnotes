@@ -17,7 +17,11 @@ import {
   updateTech,
   addModule,
   updateModule,
-  deleteModule
+  deleteModule,
+  updateManyTechs,
+  updateManyGroups,
+  updateManyModules,
+  updateManyParagraphs
 } from '../../services/backend';
 
 export default function DataPage() {
@@ -39,6 +43,7 @@ export default function DataPage() {
       setTechs(data);
     } catch (error) {
       alert(`data-page.getAllTechs`, error.message);
+      console.log(error, error.message);
     }
   }
 
@@ -47,7 +52,7 @@ export default function DataPage() {
     getAllTechs();
   }, [])
 
-  // //-> fetching Groups effect
+  //-> fetching Groups effect
   useEffect(() => {
     async function fetchData() {
       if (selTech === undefined || selTech.id === undefined)
@@ -57,6 +62,7 @@ export default function DataPage() {
         setModuleGroups(data);
       } catch (error) {
         alert(`Groups Effect`, error.message);
+        console.log(error, error.message);
       }
     }
     fetchData();
@@ -72,6 +78,7 @@ export default function DataPage() {
         setModules(data);
       } catch (error) {
         alert(`Modules Effect`, error.message);
+        console.log(error, error.message);
       }
     }
     fetchData();
@@ -87,6 +94,7 @@ export default function DataPage() {
         setParagraphs(data);
       } catch (error) {
         alert(`Paragraphs Effect`, error.message);
+        console.log(error, error.message);
       }
     }
     fetchData();
@@ -99,7 +107,7 @@ export default function DataPage() {
     setModuleGroups(undefined);
     setSelTech(tech);
   }
-  
+
   function handleGroupSelection(group) {
     setSelModule(undefined);
     setModules(undefined);
@@ -112,11 +120,12 @@ export default function DataPage() {
   }
 
   async function createTech(title) {
-    if (loading || title === undefined || title === null || title.trim().length === 0)
+    if (loading || title === undefined || title === null || title?.trim()?.length === 0)
       return;
+    const maxRank = techs?.reduce((max, current) => (current.data.rank > max ? current.data.rank : max), 0);
     const tech = {
       title: title,
-      rank: techs.length
+      rank: maxRank + 1
     }
     setLoading(true);
     await addTech(tech);
@@ -125,11 +134,12 @@ export default function DataPage() {
   }
 
   async function createGroup(title) {
-    if (loading || title === undefined || title === null || title.trim().length === 0 || selTech === undefined)
+    if (loading || title === undefined || title === null || title?.trim()?.length === 0 || selTech === undefined)
       return;
+    const maxRank = moduleGroups?.reduce((max, current) => (current.data.rank > max ? current.data.rank : max), 0);
     const group = {
       title: title,
-      rank: moduleGroups.length,
+      rank: maxRank + 1,
       techId: selTech.id
     }
     setLoading(true);
@@ -142,9 +152,10 @@ export default function DataPage() {
   async function createModule(title) {
     if (loading || title === undefined || title === null || title.trim().length === 0 || selGroup === undefined)
       return;
+    const maxRank = modules?.reduce((max, current) => (current.data.rank > max ? current.data.rank : max), 0);
     const module = {
       title: title,
-      rank: modules.length,
+      rank: maxRank + 1,
       groupId: selGroup.id
     }
     setLoading(true);
@@ -218,6 +229,56 @@ export default function DataPage() {
     setLoading(false);
   }
 
+
+  async function reRankTech() {
+    if (loading)
+      return;
+
+    const rankedTechs = [...techs];
+    rankedTechs.forEach((r, index) => r.data.rank = index);
+    setLoading(true);
+    await updateManyTechs(rankedTechs)
+    await getAllTechs();
+    setLoading(false);
+  }
+
+  async function reRankGroup() {
+    if (loading)
+      return;
+
+    const rankedGroups = [...moduleGroups];
+    rankedGroups.forEach((g, index) => g.data.rank = index);
+    setLoading(true);
+    await updateManyGroups(moduleGroups)
+    const data = await groupsByTechId(selTech?.id);
+    setModuleGroups(data);
+    setLoading(false);
+  }
+
+  async function reRankModule() {
+    if (loading)
+      return;
+    const rankedModules = [...modules];
+    rankedModules.forEach((m, index) => m.data.rank = index);
+    setLoading(true);
+    await updateManyModules(rankedModules)
+    const data = await modulesByGroupId(selGroup?.id);
+    setModules(data);
+    setLoading(false);
+  }
+
+  async function reRankParagraph() {
+    if (loading)
+      return;
+
+    const rankedParagraphs = [...paragraphs];
+    rankedParagraphs.forEach((p, index) => p.data.rank = index);
+    setLoading(true);
+    await updateManyParagraphs(rankedParagraphs)
+    const data = await paragraphsByModuleId(selModule?.id)
+    setLoading(false);
+  }
+
   return (
     <div className={styles.wrapper}>
       {
@@ -234,6 +295,7 @@ export default function DataPage() {
                 create={createTech}
                 remove={removeTech}
                 update={editTech}
+                reRank={reRankTech}
               />
             </div>
 
@@ -246,6 +308,7 @@ export default function DataPage() {
                 create={createGroup}
                 remove={removeGroup}
                 update={editGroup}
+                reRank={reRankGroup}
               />
             </div>
 
@@ -258,6 +321,7 @@ export default function DataPage() {
                 create={createModule}
                 remove={removeModule}
                 update={editModule}
+                reRank={reRankModule}
               />
             </div>
 
