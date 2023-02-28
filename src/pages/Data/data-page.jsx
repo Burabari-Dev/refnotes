@@ -9,7 +9,6 @@ import {
   allTechs,
   deleteGroup,
   deleteTech,
-  techGroupedModules,
   groupsByTechId,
   modulesByGroupId,
   paragraphsByModuleId,
@@ -116,7 +115,6 @@ export default function DataPage() {
 
   function handleModuleSelection(mod) {
     setSelModule(mod);
-    //TODO: Fetch module contents from Server.
   }
 
   async function createTech(title) {
