@@ -6,6 +6,7 @@ import Login from '../pages/Login/login';
 import TechDetail from '../pages/Tech-Detail/tech-detail';
 import Technologies from '../pages/Technologies/technologies';
 import UserProfile from '../pages/User-Profile/user-profile';
+import ContentEditor from '../features/content-editor/contentEditor';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
       {
         path: '/data',
         element: <DataPage/>,
+        errorElement: <ErrorPage/>
+      },
+      {
+        path: '/demo',
+        element: <ContentEditor/>,
         errorElement: <ErrorPage/>
       },
     ]
