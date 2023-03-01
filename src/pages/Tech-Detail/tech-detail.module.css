@@ -7,11 +7,14 @@
 }
 
 .topBar {
+  display: flex;
+  flex: 1;
+  justify-content: center;
   color: #fff;
   background-color: #5A584EEE;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  /* border-radius: 4px; */
+  max-height: fit-content;
   padding: 4px 4px 4px 12px;
 }
 
@@ -32,8 +35,12 @@
   min-width: 220px;
   font-size: 14px;
   border-right: #5A584E44 solid .5px;
+  border-bottom: #5A584E44 solid .5px;
   padding-right: 20px;
-  /* min-height: 100%; */
+  padding-bottom: 20px;
+  max-height: calc(100dvh - 150px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mainMenu {
