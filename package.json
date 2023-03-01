@@ -16,6 +16,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "emulate": "dotenv firebase emulators:start",
+    "emulate-save": "dotenv firebase emulators:start --import=./emulate-data --export-on-exit",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -37,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3"
   }
 }
