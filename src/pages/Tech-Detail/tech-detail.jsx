@@ -23,9 +23,7 @@ export default function TechDetail() {
     async function fetchData() {
       try {
         const data = await getTechById(techId);
-        data instanceof Boolean ?
-          alert('Tech could not be retrieved by id')
-          : setTech(data);
+        setTech(data);
       } catch (error) {
         alert('Error getting Tech by ID', error.message);
       }
@@ -63,7 +61,7 @@ export default function TechDetail() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.topBar}>{tech?.name}</div>
+      <div className={styles.topBar}>{tech?.data.title}</div>
       <div className={styles.details}>
 
         <div className={styles.menus}>

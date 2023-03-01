@@ -85,9 +85,7 @@ export async function allTechs() {
 export async function getTechById(techId) {
   const docRef = doc(db, 'technologies', techId);
   const docSnap = await getDoc(docRef);
-  if (docSnap.exists())
-    return docSnap.data();
-  return false;
+  return {id: docSnap.id, data: docSnap.data()};
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TECHNOLOGIES [END] ~~~~~~~~~~##
 
@@ -125,10 +123,10 @@ export async function techGroupedModules(techId) {
   const groups = await groupsByTechId(techId);
   const _groups = groups.map(g => ({ id: g.id, title: g.data.title, type: 'MAIN' }))
   const arr = [..._groups];
-  
+
   for (const g of _groups) {
     const modules = await modulesByGroupId(g.id);
-    const _modules = modules.map(m => ({id: m.id, title: m.data.title, type: 'SUB'}))
+    const _modules = modules.map(m => ({ id: m.id, title: m.data.title, type: 'SUB' }))
     arr.splice(arr.indexOf(g) + 1, 0, ..._modules);
   }
   return arr;
