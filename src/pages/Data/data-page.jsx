@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import DraggableList from '../../features/draggable-list/draggableList';
 import styles from './data-page.module.css';
-// import { techs as technologies } from '../../test-data/techs';
 import {
   addGroup,
   addTech,
