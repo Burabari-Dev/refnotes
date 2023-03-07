@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ParagraphDiv from '../../features/paragraph-div/paragraphDiv';
+import ParagraphViewer from '../../features/paragraph-viewer/paragraphViewer';
 import { techGroupedModules, paragraphsByModuleId, getTechById } from '../../services/backend';
 import styles from './tech-detail.module.css';
 
@@ -9,13 +9,10 @@ export default function TechDetail() {
   const [tech, setTech] = useState();
   const [moduleMenus, setModuleMenus] = useState([]);
   const [selModule, setSelModule] = useState();
-  const [moduleData, setModuleData] = useState();
+  const [paragraphs, setParagraphs] = useState();
 
   function handleMenuClick(module) {
     setSelModule(module);
-
-    // const data = getModuleData(menuId);
-    // setModuleData(data);
   }
 
   //-> Effect to get Tech from Tech ID
@@ -45,18 +42,22 @@ export default function TechDetail() {
     fetchData();
   }, [techId])
 
-  //-> Effect to get Module data whenever Module Menu is clicked
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const data = await paragraphsByModuleId(selModuleId);
-  //       setModuleData(data);
-  //     } catch (error) {
-  //       alert('Failed to get Module Data', error.message);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [selModuleId])
+  // -> Effect to get Module data whenever Module Menu is clicked
+  useEffect(() => {
+    async function fetchData() {
+      if (!selModule)
+        return;
+      try {
+        console.log(selModule);
+        const data = await paragraphsByModuleId(selModule.id);
+        console.log(data);
+        setParagraphs(data);
+      } catch (error) {
+        alert('Failed to get Module Data', error.message);
+      }
+    }
+    fetchData();
+  }, [selModule])
 
 
   return (
@@ -69,10 +70,10 @@ export default function TechDetail() {
             moduleMenus?.map(mm => {
               let isMain = mm.type === 'MAIN';
               return <div
-                key={mm.id} 
+                key={mm.id}
                 className={isMain ? styles.mainMenu : styles.subMenu}
                 onClick={isMain ? null : () => handleMenuClick(mm)}
-                style={(selModule && selModule.id === mm.id) ? {backgroundColor: '#ddd'} : null}
+                style={(selModule && selModule.id === mm.id) ? { backgroundColor: '#ddd' } : null}
               >{mm.title}
               </div>
             })
@@ -82,8 +83,8 @@ export default function TechDetail() {
 
         <div className={styles.contentArea}>
           {
-            moduleData
-              ? moduleData.map(p => <ParagraphDiv contents={p.data.contents} key={p.id} />)
+            paragraphs
+              ? paragraphs.map(p => <ParagraphViewer paragraph={p} key={p.id} />)
               : <div className={styles.centered}>Click on a menu to the left to see data.</div>
           }
         </div>

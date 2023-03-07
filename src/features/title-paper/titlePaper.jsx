@@ -57,7 +57,7 @@ export default function TitlePaper({ item, create, update, remove }) {
       {
         edit
           ? <>
-            <textarea ref={inputRef} >{initTitle}</textarea>
+            <textarea className={styles.textArea} ref={inputRef} >{initTitle}</textarea>
             <div className={styles.icon} onClick={handleClickCheck}><CheckIcon /></div>
           </>
           : <>

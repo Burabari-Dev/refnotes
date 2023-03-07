@@ -14,7 +14,7 @@ import {
   getDoc,
   orderBy
 } from "firebase/firestore";
-import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, connectStorageEmulator } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 // Your web app's Firebase configuration
@@ -22,12 +22,13 @@ const firebaseConfig = {
   apiKey: "AIzaSyAcmVgv7qr0JR5WS1um6JEqE8cCP4-glMM",
   authDomain: "refnotes-f3644.firebaseapp.com",
   projectId: "refnotes-f3644",
-  storageBucket: "refnotes-f3644.appspot.com",
+  storageBucket: "refnotes-f3644.appspot.com",//gs://refnotes-f3644.appspot.com
   messagingSenderId: "694793057846",
   appId: "1:694793057846:web:e53e8f7ca16ef30a87ca97"
 };
 
 const isDevEnv = process.env.NODE_ENV === 'development'  //location.hostname === 'localhost' || location.hostname === '192.168.0.1';
+console.log('>>>>>> Node Env: ', process.env.NODE_ENV);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -36,17 +37,30 @@ const storage = getStorage(app);
 const functions = getFunctions(getApp());
 
 // if(location.hostname === 'localhost'){
-if (isDevEnv) {
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectStorageEmulator(storage, 'localhost', 9199);
-  connectFunctionsEmulator(functions, 'localhost', 5001);
-}
+// if (isDevEnv) {
+//   connectFirestoreEmulator(db, 'localhost', 8080);
+//   connectStorageEmulator(storage, 'localhost', 9199);
+//   connectFunctionsEmulator(functions, 'localhost', 5001);
+// }
+
+
 
 //-> COLLECTIONS
 const techsRef = collection(db, 'technologies');
 const groupsRef = collection(db, 'module-groups');
 const modulesRef = collection(db, 'modules');
 const paragraphsRef = collection(db, 'paragraphs');
+//-> STORAGE REF
+const storageRef = ref(storage, 'public');
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IMAGES [START] ~~~~~~~~##
+export async function uploadImage(imageFile){
+  const imageRef = ref(storageRef, `images/${imageFile.name}`);
+  const snapshot = await uploadBytes(imageRef, imageFile);
+  const imageDownloadURL = await getDownloadURL(snapshot.ref);
+  return imageDownloadURL;
+}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IMAGES [END] ~~~~~~~~~~##
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TECHNOLOGIES [START] ~~~~~~~~##
@@ -186,7 +200,7 @@ export async function deleteParagraph(paragraphId) {
 }
 
 export async function paragraphsByModuleId(moduleId) {
-  const q = query(modulesRef, where('moduleId', '==', moduleId));
+  const q = query(paragraphsRef, where('moduleId', '==', moduleId), orderBy('rank'));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
 }

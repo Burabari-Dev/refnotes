@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  max-height: fit-content;
+  /* padding: 10px; */
+  border-radius: 4px;
+  margin-bottom: 24px;
+  border: 1px solid #ddd0;
+}
+
+.container:hover {
+  border: 1px solid #ddd;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 8px;
+  flex-shrink: 1;
+  background-color: #ddd;
+}
+
+.tab {
+  border: .5px solid #bbb;
+  padding: 2px 12px;
+  border-radius: 8px;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #eee;
+}
+
+.tab[active=true] {
+  background-color: #fff;
+}
+
+.options {
+  display: flex;
+  gap: 12px;
+}
+
+.edit {
+  display: flex;
+}
+
+.text {
+  display: flex;
+}
+
+.code {
+  display: flex;
+}
+
+.image {
+  display: flex;
+  flex-direction: column;
+  font-size: smaller;
+  font-weight: bold;
+  font-family: cursive;
+  font-style: italic;
+  text-decoration-line: underline;
+}
+
+.image>img {
+  max-width: 90%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.link {
+  display: flex;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  border: 0.5px solid #bbb;
+}
+
+.icon:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 5px #888888ee;
+}
+
+.iconWraper {
+  position: absolute;
+  right: 45px;
+  margin-top: 10px;
+}
