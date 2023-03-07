@@ -1,13 +1,13 @@
-import ContentEditor from '../../features/content-editor/contentEditor';
-import PE from '../../features/content-editor/PE';
-import PV from '../../features/content-editor/PV';
+import ParagraphEditor from '../../features/paragraph-editor/paragraphEditor';
+import ParagraphViewer from '../../features/paragraph-viewer/paragraphViewer';
 import styles from './demo.module.css';
 
 export default function Demo() {
   return (
     <div className={styles.container}>
+      <ParagraphEditor />
       {/* <ContentEditor /> */}
-      <PE paragraph={
+      {/* <PE paragraph={
         {
           id: '001', data: {
             modueId: 'm001', 
@@ -15,7 +15,7 @@ export default function Demo() {
             contents: { Java: 'This is some Java text', Python: 'Pythonians! Here we go!' }
           }
         }
-      } />
+      } /> */}
       {/* <PV paragraph={
         {
           id: '001', data: {
