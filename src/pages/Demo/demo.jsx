@@ -1,5 +1,5 @@
 import ParagraphEditor from '../../features/paragraph-editor/paragraphEditor';
-import ParagraphViewer from '../../features/paragraph-viewer/paragraphViewer';
+// import ParagraphViewer from '../../features/paragraph-viewer/paragraphViewer';
 import styles from './demo.module.css';
 
 export default function Demo() {
