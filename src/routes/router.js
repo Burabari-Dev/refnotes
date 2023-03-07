@@ -6,7 +6,6 @@ import Login from '../pages/Login/login';
 import TechDetail from '../pages/Tech-Detail/tech-detail';
 import Technologies from '../pages/Technologies/technologies';
 import UserProfile from '../pages/User-Profile/user-profile';
-import ContentEditor from '../features/content-editor/contentEditor';
 import Demo from '../pages/Demo/demo';
 
 export const router = createBrowserRouter([
