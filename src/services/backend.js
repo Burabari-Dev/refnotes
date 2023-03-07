@@ -200,7 +200,7 @@ export async function deleteParagraph(paragraphId) {
 }
 
 export async function paragraphsByModuleId(moduleId) {
-  const q = query(modulesRef, where('moduleId', '==', moduleId));
+  const q = query(paragraphsRef, where('moduleId', '==', moduleId), orderBy('rank'));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
 }
