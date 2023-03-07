@@ -8,13 +8,13 @@
 
 .topBar {
   display: flex;
-  flex: 1;
+  /* flex: 1; */
   justify-content: center;
   color: #fff;
   background-color: #5A584EEE;
   font-size: 13px;
   font-weight: 600;
-  max-height: fit-content;
+  /* max-height: fit-content; */
   padding: 4px 4px 4px 12px;
 }
 
