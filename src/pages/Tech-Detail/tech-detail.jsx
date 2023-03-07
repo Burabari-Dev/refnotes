@@ -48,9 +48,7 @@ export default function TechDetail() {
       if (!selModule)
         return;
       try {
-        console.log(selModule);
         const data = await paragraphsByModuleId(selModule.id);
-        console.log(data);
         setParagraphs(data);
       } catch (error) {
         alert('Failed to get Module Data', error.message);

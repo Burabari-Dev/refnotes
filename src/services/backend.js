@@ -28,7 +28,7 @@ const firebaseConfig = {
 };
 
 const isDevEnv = process.env.NODE_ENV === 'development'  //location.hostname === 'localhost' || location.hostname === '192.168.0.1';
-console.log('>>>>>> Node Env: ', process.env.NODE_ENV);
+// console.log('>>>>>> Node Env: ', process.env.NODE_ENV);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
