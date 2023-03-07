@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #eee;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #eee;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.types {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+.types,
+.controls {
+  background-color: #ddd;
+  border-radius: 6px;
+  margin: 2px;
+  padding: 4px 10px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+}
+
+.icon:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 5px #888888ee;
+}
+
+.options{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 6px;
+  gap: 4px;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #eee;
+  /* padding: 12px 4px 4px 4px; */
+}
+
+.imageInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  background-color: #eee;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 8px;
+  padding-left: 24px;
+}
+
+.column{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.textArea {
+  display: flex;
+  padding: 10px;
+  resize: vertical;
+  margin: 4px;
+}
+
+.btn {
+  margin: 4px;
+  height: 30px;
+}
