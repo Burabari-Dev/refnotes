@@ -18,8 +18,12 @@ import {
   updateManyTechs,
   updateManyGroups,
   updateManyModules,
-  updateManyParagraphs
+  updateManyParagraphs,
+  addParagraph,
+  updateParagraph,
+  deleteParagraph
 } from '../../services/backend';
+import DraggableParagraphs from '../../features/draggable-paragraphs/draggableParagraphs';
 
 export default function DataPage() {
   const [techs, setTechs] = useState([]);
@@ -115,6 +119,10 @@ export default function DataPage() {
     setSelModule(mod);
   }
 
+  function handleParagraphSelection(para) {
+    setSelParagraph(para);
+  }
+
   async function createTech(title) {
     if (loading || title === undefined || title === null || title?.trim()?.length === 0)
       return;
@@ -161,6 +169,20 @@ export default function DataPage() {
     setLoading(false);
   }
 
+  async function createParagraph(paragraph) {
+    if (loading || paragraph === undefined || paragraph === null)
+      return;
+    const maxRank = paragraphs?.reduce((max, current) => (current.data.rank > max ? current.data.rank : max), 0);
+    paragraph.rank = maxRank + 1;
+    paragraph.moduleId = selModule.id;
+
+    setLoading(true);
+    await addParagraph(paragraph);
+    const data = await paragraphsByModuleId(selModule?.id);
+    setParagraphs(data);
+    setLoading(false);
+  }
+
   async function editTech(tech) {
     if (loading || tech === undefined || tech === null)
       return;
@@ -193,6 +215,17 @@ export default function DataPage() {
     setLoading(false);
   }
 
+  async function editParagraph(paragraph) {
+    if (loading || paragraph === undefined || paragraph === null)
+      return;
+
+    setLoading(true);
+    await updateParagraph(paragraph)
+    const data = await paragraphsByModuleId(selParagraph?.id);
+    setParagraphs(data);
+    setLoading(false);
+  }
+
   async function removeTech(techId) {
     if (loading || techId === undefined || techId === null || techId.trim().length === 0)
       return;
@@ -222,6 +255,17 @@ export default function DataPage() {
     await deleteModule(moduleId);
     const data = await modulesByGroupId(selGroup?.id);
     setModules(data);
+    setLoading(false);
+  }
+
+  async function removeParagraph(paragraphId) {
+    if (loading || paragraphId === undefined || paragraphId === null || paragraphId.trim().length === 0)
+      return;
+
+    setLoading(true);
+    await deleteParagraph(paragraphId);
+    const data = await paragraphsByModuleId(selParagraph?.id);
+    setParagraphs(data);
     setLoading(false);
   }
 
@@ -272,6 +316,7 @@ export default function DataPage() {
     setLoading(true);
     await updateManyParagraphs(rankedParagraphs)
     const data = await paragraphsByModuleId(selModule?.id)
+    setParagraphs(data);
     setLoading(false);
   }
 
@@ -322,11 +367,17 @@ export default function DataPage() {
             </div>
 
             <div className={styles.detailsColumn}>
-              <div className={styles.header}>{selModule?.title}</div>
+              <div className={styles.header}>{selModule?.data?.title}</div>
               <div className={styles.previewArea}>
-                {/* TODO: Array of TextBlocks here! -> Holds paragraphs of text or code.
-                  You should be able to add alternates to one code block. */}
-
+                <DraggableParagraphs
+                  paragraphs={paragraphs}
+                  setParagraphs={setParagraphs}
+                  handleClick={handleParagraphSelection}
+                  create={createParagraph}
+                  remove={removeParagraph}
+                  update={editParagraph}
+                  reRank={reRankParagraph}
+                />
               </div>
             </div>
           </>
