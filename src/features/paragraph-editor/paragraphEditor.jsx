@@ -65,8 +65,8 @@ export default function ParagraphEditor({ paragraph, create, update, remove }) {
     const _options = [...options, opt].filter(o => o !== 'NONE'); //-> When specifying or adding option, delete NONE option.
     setOptions(_options);
     setSelectedOption(opt);
-    
-    let _contents = {...contents};
+
+    let _contents = { ...contents };
     delete _contents['NONE'];                                     //-> Also delete the NONE property in contents.
     setContents(_contents);
   }
@@ -175,7 +175,17 @@ function Options({ options, selectedType, selectedOption, handleOptionChange, ad
               }
             </select>
             <div className={styles.icon} onClick={removeOption}><DeleteIcon /></div>
-            <input type={'text'} placeholder='add option' value={newOption} onChange={(e) => setNewOption(e.target.value)} />
+            <input
+              type={'text'}
+              placeholder='add option'
+              value={newOption}
+              onChange={(e) => setNewOption(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addOption(newOption);
+                }
+              }} />
             <button type='button' onClick={() => addOption(newOption)} >+</button>
           </div>
           : <></>
@@ -198,7 +208,7 @@ function Contents({ selectedType, contentText, saveContentText, url, caption, sa
   }
 
   useEffect(() => {
-    setText(contentText ? contentText : 'No data');
+    setText(contentText ? contentText : '');
   }, [contentText])
 
   return (
@@ -207,11 +217,28 @@ function Contents({ selectedType, contentText, saveContentText, url, caption, sa
         selectedType === 'TEXT' || selectedType === 'CODE'
           ?
           <div className={styles.editor}>
-            <textarea className={styles.textArea} value={text} onChange={(e) => setText(e.target.value)} rows={12} />
+            <textarea
+              className={styles.textArea}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={12}
+              onKeyDown={(e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                  e.preventDefault();
+                  saveTextAndCode();
+                }
+              }} />
             <button className={styles.btn} type='button' onClick={saveTextAndCode}>{`Save ${selectedType}`}</button>
           </div>
           :
-          <div className={styles.imageInput}>
+          <div
+            className={styles.imageInput}
+            onKeyDown={(e) => {
+              if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                saveUrlAndCaption();
+              }
+            }}  >
             {
               selectedType === 'IMAGE' && <ImageUpload setImageUrl={setNewUrl} />
             }
